@@ -1,10 +1,19 @@
-import { Router } from "express";
-//import { getMovies, addMovie } from "../controllers/movieController";
+import express from "express";
+import {
+  getMovies,
+  getMovieById,
+  createMovie,
+  updateMovie,
+  deleteMovie,
+} from "../controllers/movieController";
 
-const router = Router();
+const router = express.Router();
 
-// Define routes for movie-related actions
-// router.get("/", getMovies);
-// router.post("/", addMovie);
+// Movie CRUD Routes
+router.get("/", getMovies); // Get all movies
+//router.get("/:id", getMovieById); // Get a single movie by ID
+router.post("/", createMovie); // Add a new movie
+router.put("/:id", updateMovie); // Update a movie
+router.delete("/:id", deleteMovie); // Delete a movie
 
 export default router;

@@ -53,7 +53,7 @@ export const createMovie = async (req: Request, res: Response) => {
   }
 };
 
-// ✅ Update a movie by ID
+// Update a movie by ID
 export const updateMovie = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { title, description, releaseYear, genre, poster, trailerUrl } =
