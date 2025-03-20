@@ -3,6 +3,48 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+// Get a single movie by ID
+export const getMovieById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { id } = req.params;
+
+  // Check if the ID is a valid number
+  const movieId = parseInt(id);
+
+  if (isNaN(movieId)) {
+    res.status(400).json({ message: "Invalid ID format" });
+    return;
+  }
+
+  try {
+    const movie = await prisma.movie.findUnique({
+      where: { id: movieId },
+    });
+
+    if (!movie) {
+      res.status(404).json({ message: "Movie not found" });
+      return;
+    }
+
+    res.json(movie);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error fetching movie:", error);
+      res
+        .status(500)
+        .json({ message: "Failed to fetch movie", error: error.message });
+    } else {
+      console.error("Unknown error:", error);
+      res.status(500).json({
+        message: "Failed to fetch movie",
+        error: "Unknown error occurred",
+      });
+    }
+  }
+};
+
 // Get all movies
 export const getMovies = async (req: Request, res: Response) => {
   try {
@@ -10,23 +52,6 @@ export const getMovies = async (req: Request, res: Response) => {
     res.json(movies);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch movies", error });
-  }
-};
-
-// Get a single movie by ID
-export const getMovieById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  try {
-    const movie = await prisma.movie.findUnique({
-      where: { id: parseInt(id) },
-    });
-
-    if (!movie) return res.status(404).json({ message: "Movie not found" });
-
-    res.json(movie);
-  } catch (error) {
-    res.status(500).json({ message: "Failed to fetch movie", error });
   }
 };
 

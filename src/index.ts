@@ -8,8 +8,14 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
-app.use(express.json());
+const corsOptions = {
+  origin: process.env.ORIGIN,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+};
+
+app.use(cors(corsOptions));
+// app.use(morgan("dev"));
+
 app.use("/api/movies", movieRoutes);
 
 app.listen(PORT, () => {
