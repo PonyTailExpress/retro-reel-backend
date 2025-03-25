@@ -9,11 +9,14 @@ datasource db {
 
 model Movie {
   id          Int      @id @default(autoincrement())
+  imdbId      String   @unique
   title       String
-  description String
+  description String // Can store OMDb's plot
   releaseYear Int
-  genre       String
+  genre       String[] // Changed from String to String[] for multiple genres
+  director    String // New field (from OMDb)
   poster      String
+  rating      Float? // New field (IMDb rating from OMDb)
   trailerUrl  String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

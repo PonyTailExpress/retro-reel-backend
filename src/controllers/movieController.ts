@@ -69,6 +69,8 @@ export const createMovie = async (req: Request, res: Response) => {
         genre,
         poster,
         trailerUrl,
+        imdbId: req.body.imdbId, // Ensure this field is provided in the request body
+        director: req.body.director, // Ensure this field is provided in the request body
       },
     });
 

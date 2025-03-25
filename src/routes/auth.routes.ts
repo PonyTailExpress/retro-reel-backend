@@ -73,6 +73,8 @@ router.post(
 
       // Compare the password
       const passwordCorrect = bcrypt.compareSync(password, foundUser.password);
+      console.log(`passwordCorrect`, passwordCorrect);
+
       if (passwordCorrect) {
         // If password is correct, create the JWT payload
         const { id, username, email: userEmail } = foundUser;
