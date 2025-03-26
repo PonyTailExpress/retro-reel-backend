@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import movieRoutes from "./routes/movie.routes";
 import authRoutes from "./routes/auth.routes";
+import favoritesRoutes from "./routes/favorites.routes";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/movies", movieRoutes);
 app.use("/auth", authRoutes);
+app.use("/favorites", favoritesRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

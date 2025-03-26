@@ -19,8 +19,13 @@ export const getMovieById = async (
   }
 
   try {
-    const movie = await prisma.movie.findUnique({
-      where: { id: movieId },
+    const movie = await prisma.movie.findFirst({
+      where: {
+        OR: [
+          { id: movieId }, // Search by numeric id
+          { imdbId: id }, // Search by imdbId
+        ],
+      },
     });
 
     if (!movie) {

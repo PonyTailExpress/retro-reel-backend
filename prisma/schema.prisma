@@ -7,39 +7,80 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Movie {
-  id          Int      @id @default(autoincrement())
-  imdbId      String   @unique
-  title       String
-  description String // Can store OMDb's plot
-  releaseYear Int
-  genre       String[] // Changed from String to String[] for multiple genres
-  director    String // New field (from OMDb)
-  poster      String
-  rating      Float? // New field (IMDb rating from OMDb)
-  trailerUrl  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
+// model Movie {
+//   id          Int      @id @default(autoincrement())
+//   imdbId      String   @unique
+//   title       String
+//   description String
+//   releaseYear Int
+//   genre       String[]
+//   director    String
+//   poster      String
+//   rating      Float?
+//   trailerUrl  String?
+//   createdAt   DateTime @default(now())
+//   updatedAt   DateTime @updatedAt
+// }
+
+// model User {
+//   id        Int      @id @default(autoincrement())
+//   username  String   @unique
+//   email     String   @unique
+//   password  String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   Review Review[]
+// }
+
+// model Review {
+//   id        Int      @id @default(autoincrement())
+//   movieId   Int
+//   userId    Int
+//   rating    Int
+//   comment   String?
+//   createdAt DateTime @default(now())
+
+//   user User @relation(fields: [id], references: [id])
+// }
 
 model User {
   id        Int      @id @default(autoincrement())
   username  String   @unique
   email     String   @unique
   password  String
+  avatar    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Review Review[]
+  favorites         Movie[]    @relation("UserFavorites")
+  favoriteRelations Favorite[]
 }
 
-model Review {
-  id        Int      @id @default(autoincrement())
-  movieId   Int
-  userId    Int
-  rating    Int
-  comment   String?
-  createdAt DateTime @default(now())
+model Movie {
+  id          Int      @id @default(autoincrement())
+  imdbId      String   @unique
+  title       String
+  description String
+  releaseYear Int
+  genre       String[]
+  director    String
+  poster      String
+  rating      Float?
+  trailerUrl  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  user User @relation(fields: [id], references: [id])
+  favoritedBy       User[]     @relation("UserFavorites")
+  favoriteRelations Favorite[]
+}
+
+model Favorite {
+  userId  Int
+  movieId Int
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@id([userId, movieId])
 }

@@ -43,6 +43,7 @@ router.post(
           id: newUser.id,
           username: newUser.username,
           email: newUser.email,
+          createdAt: newUser.createdAt,
         },
       });
     } catch (error) {
@@ -53,7 +54,7 @@ router.post(
 
 // POST /auth/login - Verifies email and password and returns a JWT
 router.post(
-  "/login",
+  "/signin",
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password }: { email: string; password: string } = req.body;
 
@@ -112,5 +113,37 @@ router.get("/verify", isAuthenticated, (req: Request, res: Response) => {
   res.status(200).json(req.payload);
   return;
 });
+
+// DELETE /auth/delete - Deletes the authenticated user
+router.delete(
+  "/delete",
+  isAuthenticated,
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userId = req.payload?.id; // Get user ID from the decoded JWT payload
+
+      if (!userId) {
+        res.status(400).json({ message: "User ID not found." });
+        return;
+      }
+
+      // Delete the user from the database
+      const deletedUser = await prisma.user.delete({
+        where: { id: userId },
+      });
+
+      res.status(200).json({
+        message: "User deleted successfully",
+        user: deletedUser,
+      });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      res.status(500).json({
+        message: "Error deleting user",
+        error: (error as Error).message,
+      });
+    }
+  }
+);
 
 export default router;
