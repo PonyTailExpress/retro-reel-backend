@@ -11,7 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const corsOptions = {
-  origin: process.env.ORIGIN || "http://localhost:5173",
+  origin: process.env.ORIGIN || "https://retro-reel.netlify.app",
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true, // Ensure cookies and auth headers are allowed
 };
